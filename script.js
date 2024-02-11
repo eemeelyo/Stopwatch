@@ -2,12 +2,12 @@ const minutesLabel = document.getElementById('minutes');
 const secondsLabel = document.getElementById('seconds');
 const millisecondsLabel = document.getElementById('milliseconds');
 
-const startButton = document.getElementById('start');
-const stopButton = document.getElementById('stop');
-const pauseButton = documnet.getElementById('pauseBtn');
-const resetButton = document.getElementById('reset');
+const startButton = document.getElementById('startBtn');
+const stopButton = document.getElementById('stopBtn');
+const pauseButton = document.getElementById('pauseBtn');
+const resetButton = document.getElementById('resetBtn');
 
-const lapList = documnet.getElementById('laplist');
+const lapList = document.getElementById('lapList');
 
 let minutes = 0;
 let seconds = 0;
@@ -20,34 +20,68 @@ pauseButton.addEventListener('click', pauseTimer);
 resetButton.addEventListener('click', resetTimer);
 
 function startTimer() {
-    interval = setInterval(() => {
-        milliseconds += 10;
-        if (milliseconds === 1000) {
-            milliseconds = 0;
-            seconds++;
-            if (seconds === 60) {
-                seconds = 0;
-                minutes++;
-            }
-        }
-        minutesLabel.textContent = minutes;
-        secondsLabel.textContent = seconds;
-        millisecondsLabel.textContent = milliseconds;
-    }, 10);
+    interval = setInterval(updateTimer, 10);
+    startButton.disabled = true;
 }
 
 function stopTimer() {
-
+    clearInterval(interval);
+    addToLapList();
+    resetTimer();
+    startButton.disabled = false;
 }
 
 function pauseTimer() {
-
+    if(pauseButton.textContent === 'Pause') {
+        clearInterval(interval);
+        pauseButton.textContent = 'Resume';
+    } else {
+        interval = setInterval(updateTimer, 10);
+        pauseButton.textContent = 'Pause';
+    }
+    // Added logic to resume from Pause
 }
 
 function resetTimer() {
-
+    clearInterval(interval);
+    resetTimerData();
+    startButton.disabled = false;
 }
 
 function updateTimer() {
-    
+    milliseconds++;
+    if(milliseconds === 100) {
+        milliseconds = 0;
+        seconds++;
+        if(seconds === 60) {
+            seconds = 0;
+            minutes++;
+        }
+    }
+    displayTimer();
+}
+
+function displayTimer() {
+    millisecondsLabel.textContent = padTime(milliseconds);
+    secondsLabel.textContent = padTime(seconds);
+    minutesLabel.textContent = padTime(minutes);
+}
+
+function padTime(time) {
+    return time.toString().padStart(2, '0');
+}
+
+function resetTimerData() {
+    minutes = 0;
+    seconds = 0;
+    milliseconds = 0;
+    displayTimer();
+}
+
+function addToLapList() {
+    const lapTime = `${padTime(minutes)}:${padTime(seconds)}:${padTime(milliseconds)}`;
+    const listTime = document.createElement('li');
+    listTime.innerHTML = `<span>Lap ${lapList.childElementCount + 1}: </span>${lapTime}`;
+    lapList.appendChild(listTime);
+
 }
