@@ -36,7 +36,7 @@ body{
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 12px rgba(0,0,0,0.2);
-    animation: pulse 1.5s infinite alternate
+    animation: pulse 1.5s infinite alternate;
 }
 
 @keyframes pulse {
@@ -70,8 +70,14 @@ button {
     cursor: pointer;
     transition: background-color 0.3s ease-in-out;
 }
-button:hover {
+/* button:hover {
     background-color:rgb(20, 170, 170);
+} */
+
+.pausePulse {
+    animation: pulse 0.5s infinite alternate;
+    background-color: red;
+    color: white;
 }
 
 .lap-title {
